@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contador deuda de besos</title>
+  <style>
+    :root{
+      --bg: #0b0b10;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.09);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --muted2: rgba(255,255,255,.55);
+      --accent: #ff4da6;
+      --accent2: #7c4dff;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(1000px 500px at 15% 15%, rgba(255,77,166,.18), transparent 55%),
+        radial-gradient(900px 500px at 85% 20%, rgba(124,77,255,.18), transparent 55%),
+        radial-gradient(900px 700px at 50% 100%, rgba(255,255,255,.06), transparent 60%),
+        var(--bg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 28px;
+    }
+    .wrap{ width:min(980px, 100%); }
+    .top{
+      display:flex;
+      gap:14px;
+      align-items:flex-end;
+      justify-content:space-between;
+      margin-bottom: 16px;
+    }
+    .brand{
+      display:flex; 
+      flex-direction:column; 
+      gap:6px;
+    }
+    .brand h1{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:.2px;
+      font-weight: 700;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      padding: 10px 12px;
+      border:1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 8px 30px rgba(0,0,0,.25);
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 16px;
+    }
+    @media (max-width: 880px){
+      .grid{ grid-template-columns: 1fr; }
+      .top{ flex-direction:column; align-items:flex-start; }
+    }
+    .card{
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      position:relative;
+    }
+    .big{
+      padding: 18px;
+      border-radius: calc(var(--radius) - 4px);
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .label{
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 10px;
+      display:flex;
+      justify-content:space-between;
+    }
+    .value{
+      font-size: clamp(38px, 6vw, 68px);
+      line-height: 1.02;
+      font-weight: 850;
+    }
+    .unit{
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .meta{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .kv{
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+    .kv .k{
+      font-size: 12px;
+      color: var(--muted2);
+      margin-bottom: 6px;
+    }
+    .kv .v{
+      font-family: var(--mono);
+      font-size: 14px;
+    }
+    .side h2{
+      margin:0 0 10px 0;
+      font-size: 15px;
+    }
+    .side p{
+      margin: 0 0 14px 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .form{ display:grid; gap: 10px; }
+    .row{ display:grid; gap: 8px; }
+    input{
+      width:100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+    }
+    .btns{ display:flex; gap: 10px; flex-wrap: wrap; }
+    button{
+      cursor:pointer;
+      border-radius: 999px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.86);
+    }
+    .primary{
+      border-color: rgba(255,77,166,.35);
+      background: linear-gradient(90deg, rgba(255,77,166,.18), rgba(124,77,255,.18));
+    }
+    .result{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .footer{
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,.50);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <h1>Contador deuda de besos</h1>
+      </div>
+      <div class="chip" id="nowChip">Cargando hora…</div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="big">
+          <div class="label">
+            <span>Deuda actual</span>
+            <span id="rateText">+20/min</span>
+          </div>
+          <div class="value" id="debt">—</div>
+          <div class="unit">besos</div>
+
+          <div class="meta">
+            <div class="kv">
+              <div class="k">Inicio</div>
+              <div class="v" id="startText">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Minutos transcurridos</div>
+              <div class="v" id="minutesText">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Deuda inicial</div>
+              <div class="v" id="initialText">—</div>
+            </div>
+            <div class="kv">
+              <div class="k">Crecimiento</div>
+              <div class="v" id="growthText">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card side">
+        <h2>Calculadora por fecha</h2>
+        <p>Elige una fecha y hora para calcular el total en ese momento.</p>
+
+        <div class="form">
+          <div class="row">
+            <input id="dt" type="datetime-local" />
+          </div>
+
+          <div class="btns">
+            <button class="primary" id="calcBtn">Calcular</button>
+            <button id="set1">1 mar 10:00 pm</button>
+            <button id="set2">2 mar 2:00 pm</button>
+            <button id="setNow">Ahora</button>
+          </div>
+
+          <div class="result" id="resultBox" style="display:none;">
+            <div id="resultMain"></div>
+            <div id="resultSub"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const CONFIG = {
+  startISO: "2025-11-19T20:40:00-06:00",
+  initialDebt: 2080,
+  ratePerMinute: 20,
+  locale: "es-MX"
+};
+
+const fmtInt = n => Math.floor(n).toLocaleString(CONFIG.locale);
+
+function compute(target){
+  const start = new Date(CONFIG.startISO).getTime();
+  const mins = Math.max(0,(target-start)/60000);
+  const growth = mins * CONFIG.ratePerMinute;
+  return {
+    mins,
+    growth,
+    total: CONFIG.initialDebt + growth
+  };
+}
+
+function tick(){
+  const now = Date.now();
+  const r = compute(now);
+  document.getElementById("debt").textContent = fmtInt(r.total);
+  document.getElementById("minutesText").textContent = fmtInt(r.mins);
+  document.getElementById("growthText").textContent = fmtInt(r.growth)+" besos";
+  document.getElementById("initialText").textContent = fmtInt(CONFIG.initialDebt)+" besos";
+  document.getElementById("startText").textContent = new Date(CONFIG.startISO).toLocaleString();
+  document.getElementById("nowChip").textContent = new Date().toLocaleString();
+}
+setInterval(tick,250);
+tick();
+
+document.getElementById("calcBtn").onclick = ()=>{
+  const v = document.getElementById("dt").value;
+  if(!v) return;
+  const r = compute(new Date(v).getTime());
+  document.getElementById("resultBox").style.display="block";
+  document.getElementById("resultMain").textContent = fmtInt(r.total)+" besos";
+  document.getElementById("resultSub").textContent =
+    "Minutos: "+fmtInt(r.mins)+" | Crecimiento: "+fmtInt(r.growth);
+};
+
+document.getElementById("set1").onclick = ()=>{
+  document.getElementById("dt").value="2026-03-01T22:00";
+};
+document.getElementById("set2").onclick = ()=>{
+  document.getElementById("dt").value="2026-03-02T14:00";
+};
+document.getElementById("setNow").onclick = ()=>{
+  const d=new Date();
+  document.getElementById("dt").value=d.toISOString().slice(0,16);
+};
+</script>
+
+</body>
+</html>
